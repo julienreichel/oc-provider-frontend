@@ -4,7 +4,6 @@ metadata:
   name: oc-provider-ingress
   namespace: oc-provider
   annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: nginx
