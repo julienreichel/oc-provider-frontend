@@ -1,5 +1,5 @@
 import type { DocumentProvider } from './DocumentProvider';
-import type { PublicDocument } from '../models/PublicDocument';
+import type { Document } from '../models/Document';
 import { HttpClient, HttpError } from './HttpClient';
 import { ApiErrorException, ApiErrors } from '../models/ApiError';
 
@@ -16,7 +16,7 @@ export class HttpDocumentProvider implements DocumentProvider {
     this.httpClient = new HttpClient(config);
   }
 
-  async getByCode(code: string): Promise<PublicDocument> {
+  async getByCode(code: string): Promise<Document> {
     // Validate access code
     const trimmedCode = code.trim();
     if (!trimmedCode) {
@@ -24,7 +24,7 @@ export class HttpDocumentProvider implements DocumentProvider {
     }
 
     try {
-      const response = await this.httpClient.get<PublicDocument>(`/public/${trimmedCode}`);
+      const response = await this.httpClient.get<Document>(`/public/${trimmedCode}`);
       return response.data;
     } catch (error) {
       throw this.mapErrorToApiException(error);

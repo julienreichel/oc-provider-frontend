@@ -1,3 +1,3 @@
 // Export all model types and utilities
-export * from './PublicDocument';
+export * from './Document';
 export * from './ApiError';

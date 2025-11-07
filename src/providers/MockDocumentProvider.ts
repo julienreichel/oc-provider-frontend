@@ -1,5 +1,5 @@
 import type { DocumentProvider } from './DocumentProvider';
-import type { PublicDocument } from '../models/PublicDocument';
+import type { Document } from '../models/Document';
 import { ApiErrorException, ApiErrors } from '../models/ApiError';
 
 /**
@@ -9,7 +9,7 @@ import { ApiErrorException, ApiErrors } from '../models/ApiError';
  * and different types of errors based on the access code provided.
  */
 export class MockDocumentProvider implements DocumentProvider {
-  private readonly documents: Map<string, PublicDocument>;
+  private readonly documents: Map<string, Document>;
 
   constructor() {
     this.documents = new Map();
@@ -26,43 +26,29 @@ export class MockDocumentProvider implements DocumentProvider {
       title: 'Sample Document 1',
       content:
         'This is the content of the first sample document. It contains important information that was shared with you.',
+      status: 'draft',
+      accessCode: null,
       createdAt: '2023-10-01T10:30:00.000Z',
-      meta: {
-        author: 'John Doe',
-        category: 'report',
-        version: 1,
-      },
     });
 
     // Sample document 2
     this.documents.set('test456', {
       id: 'doc-002',
       title: 'Test Document',
-      content:
-        'This is a test document used for validation purposes. It demonstrates the document sharing functionality.',
+      content: 'This is a test document used for validation purposes.',
+      status: 'final',
+      accessCode: 'TEST-456',
       createdAt: '2023-10-15T14:20:00.000Z',
-      meta: {
-        author: 'Jane Smith',
-        category: 'test',
-        confidential: true,
-      },
     });
 
     // Document with meta data
     this.documents.set('withmeta789', {
       id: 'doc-003',
       title: 'Document with Rich Metadata',
-      content:
-        'This document showcases various metadata types including strings, numbers, and booleans.',
+      content: 'This document showcases documents synced from the provider backend.',
+      status: 'final',
+      accessCode: 'WITHMETA-789',
       createdAt: '2023-11-01T09:15:00.000Z',
-      meta: {
-        department: 'Engineering',
-        priority: 5,
-        reviewed: false,
-        tags: 'important,review-needed',
-        size: 1024,
-        version: 2.1,
-      },
     });
 
     // Document without meta
@@ -70,6 +56,8 @@ export class MockDocumentProvider implements DocumentProvider {
       id: 'doc-004',
       title: 'Simple Document',
       content: 'This is a simple document without any metadata attached.',
+      status: 'draft',
+      accessCode: null,
       createdAt: '2023-11-07T16:45:00.000Z',
     });
 
@@ -79,18 +67,16 @@ export class MockDocumentProvider implements DocumentProvider {
       title: 'Special Characters Test Document',
       content:
         'This document tests handling of special characters in access codes and demonstrates that the system can handle various code formats.',
+      status: 'final',
+      accessCode: 'SPECIAL-CODE-123',
       createdAt: '2023-11-05T11:30:00.000Z',
-      meta: {
-        specialCharacters: true,
-        codeType: 'extended',
-      },
     });
   }
 
   /**
    * Retrieves a document by access code with simulated network delay
    */
-  async getByCode(code: string): Promise<PublicDocument> {
+  async getByCode(code: string): Promise<Document> {
     // Simulate network delay
     await this.simulateDelay();
 
@@ -173,7 +159,7 @@ export class MockDocumentProvider implements DocumentProvider {
   /**
    * Utility method to add new mock documents (useful for testing)
    */
-  public addMockDocument(code: string, document: PublicDocument): void {
+  public addMockDocument(code: string, document: Document): void {
     this.documents.set(code, { ...document });
   }
 

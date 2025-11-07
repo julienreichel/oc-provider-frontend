@@ -1,4 +1,4 @@
-import type { PublicDocument } from '../models';
+import type { Document } from '../models';
 
 /**
  * Interface for document retrieval providers
@@ -11,7 +11,7 @@ export interface DocumentProvider {
    * Retrieves a document by its access code
    *
    * @param code - The unique access code for the document
-   * @returns Promise that resolves to the PublicDocument
+   * @returns Promise that resolves to the Document
    * @throws ApiErrorException for various error conditions:
    *   - NOT_FOUND: Document doesn't exist for the given code
    *   - EXPIRED: Access code has expired
@@ -19,5 +19,5 @@ export interface DocumentProvider {
    *   - UNAVAILABLE: Service temporarily unavailable
    *   - UNKNOWN: Unexpected error occurred
    */
-  getByCode(code: string): Promise<PublicDocument>;
+  getByCode(code: string): Promise<Document>;
 }

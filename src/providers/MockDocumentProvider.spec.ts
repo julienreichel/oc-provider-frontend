@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { MockDocumentProvider } from './MockDocumentProvider';
 import { ApiErrorException } from '../models/ApiError';
-import { isPublicDocument } from '../models/PublicDocument';
+import { isDocument } from '../models/Document';
 import type { DocumentProvider } from './DocumentProvider';
 
 describe('MockDocumentProvider', () => {
@@ -21,15 +21,17 @@ describe('MockDocumentProvider', () => {
   });
 
   describe('successful document retrieval', () => {
-    it('should return a valid PublicDocument for existing code', async () => {
+    it('should return a valid Document for existing code', async () => {
       const code = 'valid123';
       const document = await provider.getByCode(code);
 
-      expect(isPublicDocument(document)).toBe(true);
+      expect(isDocument(document)).toBe(true);
       expect(document.id).toBeDefined();
       expect(document.title).toBeDefined();
       expect(document.content).toBeDefined();
       expect(document.createdAt).toBeDefined();
+      expect(['draft', 'final']).toContain(document.status);
+      expect(typeof document.accessCode === 'string' || document.accessCode === null).toBe(true);
       expect(typeof document.id).toBe('string');
       expect(typeof document.title).toBe('string');
       expect(typeof document.content).toBe('string');
@@ -63,16 +65,9 @@ describe('MockDocumentProvider', () => {
       expect(date.toString()).not.toBe('Invalid Date');
     });
 
-    it('should support documents with meta data', async () => {
+    it('should support documents with access codes synced from backend', async () => {
       const document = await provider.getByCode('withmeta789');
-
-      expect(document.meta).toBeDefined();
-      if (document.meta) {
-        // Meta should only contain string, number, or boolean values
-        Object.values(document.meta).forEach((value) => {
-          expect(['string', 'number', 'boolean']).toContain(typeof value);
-        });
-      }
+      expect(document.accessCode).toBe('WITHMETA-789');
     });
   });
 
@@ -158,7 +153,7 @@ describe('MockDocumentProvider', () => {
       // Should either return a document or throw a specific error
       try {
         const result = await provider.getByCode(longCode);
-        expect(isPublicDocument(result)).toBe(true);
+        expect(isDocument(result)).toBe(true);
       } catch (error) {
         expect(error).toBeInstanceOf(ApiErrorException);
       }
@@ -170,7 +165,7 @@ describe('MockDocumentProvider', () => {
       // Should either return a document or throw a specific error
       try {
         const result = await provider.getByCode(specialCode);
-        expect(isPublicDocument(result)).toBe(true);
+        expect(isDocument(result)).toBe(true);
       } catch (error) {
         expect(error).toBeInstanceOf(ApiErrorException);
       }

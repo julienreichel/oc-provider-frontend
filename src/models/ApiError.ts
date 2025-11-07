@@ -1,101 +1,68 @@
-/**
- * Error codes for API operations
- */
-export type ApiErrorCode =
-  | 'NOT_FOUND' // Document not found for the given code
-  | 'EXPIRED' // Document access code has expired
-  | 'UNAVAILABLE' // Service temporarily unavailable
-  | 'INVALID' // Invalid access code format or request
-  | 'UNKNOWN'; // Unknown or unexpected error
-
-/**
- * Represents an API error with a specific code and message
- */
 export interface ApiError {
-  /** Specific error code indicating the type of error */
-  code: ApiErrorCode;
-  /** Human-readable error message */
+  code?: string;
   message: string;
+  details?: unknown;
 }
 
-/**
- * Custom error class for API-related errors
- */
 export class ApiErrorException extends Error {
-  public readonly code: ApiErrorCode;
+  public readonly code?: string;
+  public readonly details?: unknown;
 
   constructor(apiError: ApiError) {
     super(apiError.message);
     this.code = apiError.code;
+    this.details = apiError.details;
     this.name = 'ApiErrorException';
   }
 
-  /**
-   * Create an ApiErrorException from an ApiError object
-   */
   static fromApiError(apiError: ApiError): ApiErrorException {
     return new ApiErrorException(apiError);
   }
 
-  /**
-   * Convert this exception back to an ApiError object
-   */
   toApiError(): ApiError {
     return {
       code: this.code,
       message: this.message,
+      details: this.details,
     };
   }
 }
 
-/**
- * Type guard to check if an object is a valid ApiError
- */
 export function isApiError(obj: unknown): obj is ApiError {
   if (typeof obj !== 'object' || obj === null) {
     return false;
   }
 
-  const error = obj as Record<string, unknown>;
+  const candidate = obj as Record<string, unknown>;
 
-  // Check code field
-  const validCodes: ApiErrorCode[] = ['NOT_FOUND', 'EXPIRED', 'UNAVAILABLE', 'INVALID', 'UNKNOWN'];
-  if (typeof error.code !== 'string' || !validCodes.includes(error.code as ApiErrorCode)) {
+  if ('code' in candidate && candidate.code !== undefined && typeof candidate.code !== 'string') {
     return false;
   }
 
-  // Check message field
-  if (typeof error.message !== 'string') {
+  if (typeof candidate.message !== 'string') {
     return false;
   }
 
   return true;
 }
 
-/**
- * Helper functions to create common API errors
- */
 export const ApiErrors = {
-  notFound: (message = 'Document not found'): ApiError => ({
+  notFound: (message = 'Resource not found'): ApiError => ({
     code: 'NOT_FOUND',
     message,
   }),
-
-  expired: (message = 'Access code has expired'): ApiError => ({
+  expired: (message = 'Access code expired'): ApiError => ({
     code: 'EXPIRED',
     message,
   }),
-
   unavailable: (message = 'Service temporarily unavailable'): ApiError => ({
     code: 'UNAVAILABLE',
     message,
   }),
-
   invalid: (message = 'Invalid request'): ApiError => ({
     code: 'INVALID',
     message,
   }),
-
   unknown: (message = 'An unexpected error occurred'): ApiError => ({
     code: 'UNKNOWN',
     message,

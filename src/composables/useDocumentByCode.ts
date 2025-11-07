@@ -1,6 +1,6 @@
 import { ref } from 'vue';
 import { getCurrentProvider } from '../providers/ProviderRegistry';
-import type { PublicDocument } from '../models/PublicDocument';
+import type { Document } from '../models/Document';
 import type { ApiError } from '../models/ApiError';
 import { ApiErrors, ApiErrorException } from '../models/ApiError';
 
@@ -11,7 +11,7 @@ import { ApiErrors, ApiErrorException } from '../models/ApiError';
 export function useDocumentByCode() {
   // Reactive state using refs
   const loading = ref(false);
-  const data = ref<PublicDocument | undefined>(undefined);
+  const data = ref<Document | undefined>(undefined);
   const error = ref<ApiError | undefined>(undefined);
 
   // Keep track of the current code for reload functionality

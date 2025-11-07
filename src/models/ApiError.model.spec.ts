@@ -1,41 +1,21 @@
 import { describe, it, expect } from 'vitest';
-import {
-  type ApiError,
-  type ApiErrorCode,
-  ApiErrorException,
-  isApiError,
-  ApiErrors,
-} from './ApiError';
+import { type ApiError, ApiErrorException, isApiError, ApiErrors } from './ApiError';
 
 describe('ApiError Model', () => {
   describe('ApiError interface', () => {
-    it('should compile with valid error codes', () => {
-      const notFoundError: ApiError = {
+    it('should allow optional codes and details', () => {
+      const structuredError: ApiError = {
         code: 'NOT_FOUND',
         message: 'Document not found',
+        details: { resource: 'documents', id: 'doc-123' },
       };
 
-      const expiredError: ApiError = {
-        code: 'EXPIRED',
-        message: 'Access code expired',
+      const minimalError: ApiError = {
+        message: 'Unknown error',
       };
 
-      expect(notFoundError.code).toBe('NOT_FOUND');
-      expect(expiredError.code).toBe('EXPIRED');
-    });
-
-    it('should support all defined error codes', () => {
-      const codes: ApiErrorCode[] = ['NOT_FOUND', 'EXPIRED', 'UNAVAILABLE', 'INVALID', 'UNKNOWN'];
-
-      codes.forEach((code) => {
-        const error: ApiError = {
-          code,
-          message: `Test error for ${code}`,
-        };
-
-        expect(error.code).toBe(code);
-        expect(typeof error.message).toBe('string');
-      });
+      expect(structuredError.details).toEqual({ resource: 'documents', id: 'doc-123' });
+      expect(minimalError.code).toBeUndefined();
     });
   });
 
@@ -77,8 +57,7 @@ describe('ApiError Model', () => {
       const convertedBack = exception.toApiError();
 
       expect(convertedBack).toEqual(originalError);
-      expect(convertedBack.code).toBe('UNAVAILABLE');
-      expect(convertedBack.message).toBe('Service maintenance in progress');
+      expect(convertedBack).toEqual(originalError);
     });
   });
 
@@ -89,7 +68,8 @@ describe('ApiError Model', () => {
         { code: 'EXPIRED', message: 'Expired' },
         { code: 'UNAVAILABLE', message: 'Unavailable' },
         { code: 'INVALID', message: 'Invalid' },
-        { code: 'UNKNOWN', message: 'Unknown error' },
+        { code: 'UNKNOWN', message: 'Unknown error', details: { retry: true } },
+        { message: 'Generic error without code' },
       ];
 
       validErrors.forEach((error) => {
@@ -109,11 +89,9 @@ describe('ApiError Model', () => {
       expect(isApiError([])).toBe(false);
     });
 
-    it('should return false for objects missing required fields', () => {
-      const missingCode = { message: 'Error message' };
+    it('should return false for objects missing required message field', () => {
       const missingMessage = { code: 'NOT_FOUND' };
 
-      expect(isApiError(missingCode)).toBe(false);
       expect(isApiError(missingMessage)).toBe(false);
     });
 
@@ -124,14 +102,6 @@ describe('ApiError Model', () => {
       expect(isApiError(invalidCode)).toBe(false);
       expect(isApiError(invalidMessage)).toBe(false);
     });
-
-    it('should return false for objects with invalid error codes', () => {
-      const invalidErrorCode = { code: 'INVALID_CODE', message: 'Error' };
-      const emptyCode = { code: '', message: 'Error' };
-
-      expect(isApiError(invalidErrorCode)).toBe(false);
-      expect(isApiError(emptyCode)).toBe(false);
-    });
   });
 
   describe('ApiErrors helper functions', () => {
@@ -139,7 +109,7 @@ describe('ApiError Model', () => {
       const error = ApiErrors.notFound();
 
       expect(error.code).toBe('NOT_FOUND');
-      expect(error.message).toBe('Document not found');
+      expect(error.message).toBe('Resource not found');
     });
 
     it('should create NOT_FOUND error with custom message', () => {

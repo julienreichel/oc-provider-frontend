@@ -4,16 +4,18 @@ import { useDocumentByCode } from './useDocumentByCode';
 import * as ProviderRegistry from '../providers/ProviderRegistry';
 import type { DocumentProvider } from '../providers/DocumentProvider';
 import { ApiErrors, ApiErrorException } from '../models/ApiError';
-import type { PublicDocument } from '../models/PublicDocument';
+import type { Document } from '../models/Document';
 
 describe('useDocumentByCode', () => {
   let mockProvider: DocumentProvider;
   let composable: ReturnType<typeof useDocumentByCode>;
 
-  const mockDocument: PublicDocument = {
+  const mockDocument: Document = {
     id: 'doc123',
     title: 'Test Document',
     content: 'This is test content',
+    status: 'draft',
+    accessCode: null,
     createdAt: '2024-01-15T10:30:00Z',
   };
 
