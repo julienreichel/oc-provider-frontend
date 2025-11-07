@@ -33,12 +33,17 @@ export default defineConfigWithVueTs(
    * pluginVue.configs["flat/recommended"]
    *   -> Above, plus rules to enforce subjective community defaults to ensure consistency.
    */
-  pluginVue.configs['flat/essential'],
+  pluginVue.configs['flat/strongly-recommended'],
 
   {
     files: ['**/*.ts', '**/*.vue'],
     rules: {
       '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/explicit-function-return-type': 'warn',
+      '@typescript-eslint/no-explicit-any': 'error',
+      '@typescript-eslint/prefer-nullish-coalescing': 'error',
+      '@typescript-eslint/prefer-optional-chain': 'error',
     },
   },
   // https://github.com/vuejs/eslint-config-typescript
@@ -64,9 +69,30 @@ export default defineConfigWithVueTs(
     // add your custom rules here
     rules: {
       'prefer-promise-reject-errors': 'off',
-
-      // allow debugger during development only
       'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
+      'no-console': process.env.NODE_ENV === 'production' ? 'warn' : 'off',
+      'vue/multi-word-component-names': 'error',
+      'vue/component-definition-name-casing': ['error', 'PascalCase'],
+      'vue/component-name-in-template-casing': ['error', 'PascalCase'],
+      'vue/no-unused-vars': 'error',
+      'vue/require-default-prop': 'error',
+      'vue/require-prop-types': 'error',
+    },
+  },
+
+  {
+    files: ['cypress/**/*.{js,jsx,ts,tsx}', '**/*.cy.{js,jsx,ts,tsx}'],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        cy: 'readonly',
+        Cypress: 'readonly',
+      },
+    },
+    rules: {
+      // Cypress-specific rules
+      'no-unused-expressions': 'off',
+      'no-undef': 'off', // Cypress globals are handled above
     },
   },
 

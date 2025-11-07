@@ -6,7 +6,39 @@ on:
   workflow_dispatch:
 
 jobs:
+  # Quality Gate: Run tests and code quality checks
+  quality-gate:
+    name: Quality Gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linting
+        run: npm run lint
+
+      - name: Run unit tests
+        run: npm run test:unit
+
+      - name: Run component tests
+        run: npm run test:component
+
+      - name: Verify build
+        run: npm run build
+
+  # Build and publish Docker image (depends on quality gate)
   build:
+    name: Build & Publish
+    needs: quality-gate
     permissions:
       contents: read
       packages: write
@@ -15,8 +47,11 @@ jobs:
       image_name: ghcr.io/julienreichel/oc-provider-frontend
     secrets: inherit
 
+  # Deploy to production (only on main branch, after successful build)
   deploy-prod:
+    name: Deploy Production
     if: github.ref_name == 'main'
+    needs: [quality-gate, build]
     uses: julienreichel/oc-infra/.github/workflows/reusable-deploy.yml@main
     with:
       app_kind: frontend
@@ -25,8 +60,11 @@ jobs:
       host: provider.on-track.ch
     secrets: inherit
 
+  # Deploy to development (only on dev branch, after successful build)
   deploy-dev:
+    name: Deploy Development
     if: github.ref_name == 'dev'
+    needs: [quality-gate, build]
     uses: julienreichel/oc-infra/.github/workflows/reusable-deploy.yml@main
     with:
       app_kind: frontend
