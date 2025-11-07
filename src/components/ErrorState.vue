@@ -20,10 +20,10 @@
           <!-- Retry Button -->
           <q-btn
             color="primary"
-            :label="$t('document.retry')"
+            :label="$t('actions.retry')"
             icon="refresh"
             @click="$emit('retry')"
-            :aria-label="$t('document.retry')"
+            :aria-label="$t('actions.retry')"
             class="q-mt-md"
           />
         </q-card>
@@ -56,14 +56,15 @@ const { t } = useI18n();
 const errorMessage = computed(() => {
   switch (props.error.code) {
     case 'NOT_FOUND':
-      return t('document.error.notFound');
+      return t('errors.notFound');
     case 'EXPIRED':
-      return t('document.error.expired');
+      return t('errors.expired');
     case 'INVALID':
+      return t('errors.invalid');
     case 'UNAVAILABLE':
     case 'UNKNOWN':
     default:
-      return t('document.error.unavailable');
+      return t('errors.unavailable');
   }
 });
 

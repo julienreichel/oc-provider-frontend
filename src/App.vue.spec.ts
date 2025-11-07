@@ -5,18 +5,18 @@ import App from './App.vue';
 import { i18n } from './i18n';
 
 // Mock router
-const router = createRouter({
-  history: createWebHistory(),
-  routes: [
-    {
-      path: '/',
-      component: { template: '<div>{{ $t("app.title") }}</div>' },
-    },
-  ],
-});
-
 describe('App.vue', () => {
   it('renders without errors', () => {
+    const router = createRouter({
+      history: createWebHistory(),
+      routes: [
+        {
+          path: '/',
+          component: { template: '<div>{{ $t("app.title") }}</div>' },
+        },
+      ],
+    });
+
     const wrapper = mount(App, {
       global: {
         plugins: [router, i18n],
@@ -27,6 +27,16 @@ describe('App.vue', () => {
   });
 
   it('provides i18n globally', async () => {
+    const router = createRouter({
+      history: createWebHistory(),
+      routes: [
+        {
+          path: '/',
+          component: { template: '<div>{{ $t("app.title") }}</div>' },
+        },
+      ],
+    });
+
     // Navigate to home route first
     await router.push('/');
     await router.isReady();
@@ -38,10 +48,20 @@ describe('App.vue', () => {
     });
 
     // Check that i18n is available by testing translation
-    expect(i18n.global.t('app.title')).toBe('Document Viewer');
+    expect(i18n.global.t('app.title')).toBe('Provider Workspace');
   });
 
   it('renders router-view content', async () => {
+    const router = createRouter({
+      history: createWebHistory(),
+      routes: [
+        {
+          path: '/',
+          component: { template: '<div>{{ $t("app.title") }}</div>' },
+        },
+      ],
+    });
+
     await router.push('/');
     await router.isReady();
 
@@ -52,6 +72,6 @@ describe('App.vue', () => {
     });
 
     // The router-view should render the matched route component
-    expect(wrapper.html()).toContain('Document Viewer');
+    expect(wrapper.html()).toContain('Provider Workspace');
   });
 });

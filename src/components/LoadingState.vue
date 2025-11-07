@@ -16,7 +16,7 @@
           :aria-label="$t('a11y.loadingMessage')"
           role="status"
         >
-          {{ $t('document.loading') }}
+          {{ $t('status.loading') }}
         </div>
       </div>
     </div>

@@ -2,67 +2,38 @@ import { describe, it, expect } from 'vitest';
 import type { RouteRecordRaw } from 'vue-router';
 import routes from './routes';
 
-describe('Router Routes', () => {
-  it('should define the correct number of routes', () => {
-    // We expect: MainLayout with children + catch-all 404
-    expect(routes).toHaveLength(2);
-  });
+const getMainLayout = () => routes.find((route) => route.path === '/');
 
-  it('should define main layout route with children', () => {
-    const mainLayout = routes[0];
+describe('app router map', () => {
+  it('exposes provider workspace routes behind MainLayout', () => {
+    const mainLayout = getMainLayout();
     expect(mainLayout).toBeDefined();
-    expect(mainLayout?.path).toBe('/');
-    expect(mainLayout?.component).toBeDefined();
     expect(mainLayout?.children).toBeDefined();
+
+    const childRouteNames = (mainLayout?.children ?? []).map((route) => route.name);
+    expect(childRouteNames).toEqual(
+      expect.arrayContaining(['dashboard', 'document-edit', 'document-send', 'settings']),
+    );
+
+    const editRoute = mainLayout?.children?.find(
+      (route: RouteRecordRaw) => route.path === 'documents/:id/edit',
+    );
+    expect(editRoute).toBeDefined();
+    expect(editRoute?.props).toBeUndefined(); // route params are read via useRoute
   });
 
-  it('should define access route', () => {
-    const mainLayout = routes[0];
-    expect(mainLayout).toBeDefined();
-
-    if (mainLayout?.children) {
-      const accessRoute = mainLayout.children.find((route: RouteRecordRaw) => route.path === '');
-      expect(accessRoute).toBeDefined();
-      expect(accessRoute?.name).toBe('access');
-      expect(accessRoute?.component).toBeDefined();
-    }
+  it('defines Dashboard as the default child route', () => {
+    const mainLayout = getMainLayout();
+    const dashboard = mainLayout?.children?.find((route) => route.path === '');
+    expect(dashboard?.name).toBe('dashboard');
   });
 
-  it('should define document view route with code parameter', () => {
-    const mainLayout = routes[0];
-    expect(mainLayout).toBeDefined();
-
-    if (mainLayout?.children) {
-      const viewRoute = mainLayout.children.find(
-        (route: RouteRecordRaw) => route.path === 'view/:code',
-      );
-      expect(viewRoute).toBeDefined();
-      expect(viewRoute?.name).toBe('document-view');
-      expect(viewRoute?.component).toBeDefined();
-    }
-  });
-
-  it('should define catch-all 404 route', () => {
-    const notFoundRoute = routes.find((route: RouteRecordRaw) => route.path === '/:pathMatch(.*)*');
+  it('maps catch-all paths to the NotFound page', () => {
+    const notFoundRoute = routes.find(
+      (route) => route.path === '/:catchAll(.*)*' || route.path === '/:pathMatch(.*)*',
+    );
 
     expect(notFoundRoute).toBeDefined();
-    expect(notFoundRoute?.component).toBeDefined();
-    expect(notFoundRoute?.children).toBeDefined();
     expect(notFoundRoute?.children?.[0]?.name).toBe('not-found');
-    expect(notFoundRoute?.children?.[0]?.component).toBeDefined();
-  });
-
-  it('should have proper route names for navigation', () => {
-    const mainLayout = routes[0];
-    expect(mainLayout).toBeDefined();
-
-    if (mainLayout?.children) {
-      const childRouteNames = mainLayout.children.map((route: RouteRecordRaw) => route.name);
-      expect(childRouteNames).toContain('access');
-      expect(childRouteNames).toContain('document-view');
-    }
-
-    const catchAllRoute = routes.find((route: RouteRecordRaw) => route.path === '/:pathMatch(.*)*');
-    expect(catchAllRoute?.children?.[0]?.name).toBe('not-found');
   });
 });

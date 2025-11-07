@@ -1,83 +1,102 @@
 export default {
-  // Application
   app: {
-    title: 'Document Viewer',
+    title: 'Provider Workspace',
   },
-
-  // Common actions
-  failed: 'Action failed',
-  success: 'Action was successful',
-
-  // Layout
   layout: {
-    title: 'Client Portal',
+    workspaceTitle: 'Provider Workspace',
+    skipToContent: 'Skip to workspace content',
+    menuLabel: 'Toggle navigation',
+    betaLabel: 'MVP',
   },
-
-  // Access page
-  access: {
-    title: 'Enter Access Code',
-    label: 'Access Code',
-    placeholder: 'Enter your access code',
-    submit: 'View Document',
-    instructions: 'Enter the access code you received to view your document.',
-    validation: {
-      required: 'Please enter an access code',
+  navigation: {
+    title: 'Workspace',
+    dashboard: 'Dashboard',
+    documentEdit: 'Edit document',
+    documentSend: 'Send document',
+    settings: 'Settings',
+  },
+  dashboard: {
+    title: 'Dashboard',
+    description: 'Track drafts, review send progress, and pick up where you left off.',
+    empty: {
+      title: 'No documents yet',
+      description: 'Create your first draft to start the send workflow.',
+      action: 'Start a draft',
     },
   },
-
-  // Document viewing
-  document: {
-    title: 'Document:',
-    loading: 'Loading your document',
-    error: {
-      notFound: "We couldn't find a document with this code. Please check the code and try again.",
-      expired: 'This link is no longer available.',
-      unavailable: 'The document is temporarily unavailable. Please try again in a moment.',
-      invalid: 'Please check the code and try again.',
-      unknown: 'Something went wrong. Please try again.',
+  documentEdit: {
+    title: 'Edit document',
+    subtitle: 'Document ID: {id}',
+    placeholder: 'The document editor will live here. Use the navigation to explore other routes.',
+  },
+  documentSend: {
+    title: 'Send document',
+    subtitle: 'Send summary for document {id}',
+    accessLabel: 'Access code',
+    accessHelper: 'Share this code with the recipient to preview the document.',
+    placeholder: 'Delivery and confirmation details will surface in this area.',
+  },
+  settings: {
+    title: 'Workspace settings',
+    description: 'Update organisation details, preferences, and feature flags.',
+    placeholder: 'Settings forms will be available in a future iteration.',
+  },
+  notFound: {
+    title: 'Page not found',
+    message: 'The page you are looking for could not be found.',
+    ctaHome: 'Back to dashboard',
+  },
+  status: {
+    loading: 'Loading workspace data...',
+  },
+  errors: {
+    notFound: 'We could not find the requested resource.',
+    expired: 'This link has expired.',
+    unavailable: 'The workspace is temporarily unavailable. Please try again.',
+    invalid: 'Please double-check the information and try again.',
+  },
+  actions: {
+    retry: 'Try again',
+  },
+  components: {
+    confirmDialog: {
+      confirm: 'Confirm',
+      cancel: 'Cancel',
     },
-    retry: 'Try Again',
-    createdAt: 'Created on {date}',
-    backToHome: 'Enter New Code',
-    empty: 'No content available for this document.',
+    copyField: {
+      copy: 'Copy',
+      copied: 'Copied!',
+    },
   },
-
-  // Meta information
-  meta: {
-    title: 'Document Viewer',
-    description: 'View shared documents securely',
-  },
-
-  // Accessibility labels and instructions
   a11y: {
-    skipToMain: 'Skip to main content',
+    // Skip links
+    skipToContent: 'Skip to workspace content',
+
+    // Main layout landmarks
+    workspaceNavigation: 'Workspace navigation',
+    mainLayout: 'Provider workspace layout',
+    headerBar: 'Header toolbar',
+    toggleNavigation: 'Toggle navigation menu',
+    pageContainer: 'Main content area',
+    mainContent: 'Main workspace content',
+
+    // Navigation links
+    dashboardLink: 'Go to dashboard',
+    documentEditLink: 'Go to document editor',
+    documentSendLink: 'Go to document send',
+    settingsLink: 'Go to settings',
+
+    // Status indicators
     loading: 'Loading...',
-    errorRegion: 'Error message',
-    documentViewPage: 'Document view page',
-    documentNavigation: 'Document navigation',
-    documentContent: 'Document content',
-    documentTitle: 'Document title',
-    documentMetadata: 'Document metadata',
-    emptyDocumentState: 'Empty document state',
-    loadingSpinner: 'Loading spinner',
+    loadingSpinner: 'Loading indicator',
     loadingMessage: 'Loading message',
     errorIndicator: 'Error indicator',
     errorMessage: 'Error message',
-    // AccessPage labels
-    accessPage: 'Document access page',
-    accessForm: 'Document access form',
-    accessPageTitle: 'Enter access code',
-    accessSubmitButton: 'Submit access code',
-    // AccessInput labels
-    accessInputField: 'Access code input',
-    accessInputError: 'Access code error',
-    accessInputLabel: 'Access code label',
-  },
 
-  // 404 Not Found page
-  notFound: {
-    title: 'Page Not Found',
-    message: 'The page you are looking for does not exist.',
-    ctaHome: 'Return Home',
+    // Interactive elements
+    menuButton: 'Menu button',
+    closeButton: 'Close button',
+    submitButton: 'Submit button',
+    cancelButton: 'Cancel button',
   },
 };
