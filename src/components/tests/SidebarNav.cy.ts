@@ -2,7 +2,7 @@ import { createMemoryHistory, createRouter } from 'vue-router';
 import SidebarNav from '../SidebarNav.vue';
 import { SidebarNavGetters } from '../SidebarNav.getters';
 
-const createTestRouter = () =>
+const createTestRouter = (): ReturnType<typeof createRouter> =>
   createRouter({
     history: createMemoryHistory(),
     routes: [

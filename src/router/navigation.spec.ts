@@ -2,7 +2,7 @@ import { describe, it, expect, beforeEach } from 'vitest';
 import { createMemoryHistory, createRouter } from 'vue-router';
 import routes from './routes';
 
-const createTestRouter = () =>
+const createTestRouter = (): ReturnType<typeof createRouter> =>
   createRouter({
     history: createMemoryHistory(),
     routes,

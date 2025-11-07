@@ -2,7 +2,7 @@ import { describe, it, expect } from 'vitest';
 import type { RouteRecordRaw } from 'vue-router';
 import routes from './routes';
 
-const getMainLayout = () => routes.find((route) => route.path === '/');
+const getMainLayout = (): RouteRecordRaw | undefined => routes.find((route) => route.path === '/');
 
 describe('app router map', () => {
   it('exposes provider workspace routes behind MainLayout', () => {

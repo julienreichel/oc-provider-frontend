@@ -36,7 +36,7 @@ interface Props {
   cancelLabel?: string;
 }
 
-const props = defineProps<Props>();
+defineProps<Props>();
 const emit = defineEmits<{
   (event: 'update:modelValue', value: boolean): void;
   (event: 'confirm'): void;
