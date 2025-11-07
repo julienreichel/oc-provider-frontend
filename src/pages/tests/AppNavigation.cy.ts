@@ -12,13 +12,16 @@ const mountApp = (initialPath = '/'): Cypress.Chainable<Router> => {
 
   void router.push(initialPath);
 
-  return cy.wrap(router.isReady()).then(() => {
-    cy.mount(App, {
-      global: {
-        plugins: [router],
-      },
-    });
-  }).then(() => router);
+  return cy
+    .wrap(router.isReady())
+    .then(() => {
+      cy.mount(App, {
+        global: {
+          plugins: [router],
+        },
+      });
+    })
+    .then(() => router);
 };
 
 describe('App navigation (workspace)', () => {
@@ -49,11 +52,11 @@ describe('App navigation (workspace)', () => {
     mountApp('/unknown/path').then((router) => {
       // Test that router handles unknown routes properly
       cy.wrap(router.currentRoute.value.name).should('equal', 'not-found');
-      
+
       // Test that 404 page renders with semantic structure
       cy.get('main[role="main"]').should('exist');
       cy.get('h1').should('exist').and('be.visible');
-      
+
       // Test that there's a navigation element to go back
       cy.get('a, button').should('exist').and('be.visible');
     });
