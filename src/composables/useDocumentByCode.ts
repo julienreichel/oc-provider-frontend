@@ -37,10 +37,16 @@ export function useDocumentByCode() {
       // Handle different error types
       if (err instanceof ApiErrorException) {
         // If it's an ApiErrorException, use the contained ApiError
-        error.value = {
-          code: err.code,
+        const normalizedError: ApiError = {
           message: err.message,
         };
+        if (err.code !== undefined) {
+          normalizedError.code = err.code;
+        }
+        if (err.details !== undefined) {
+          normalizedError.details = err.details;
+        }
+        error.value = normalizedError;
       } else if (err instanceof Error) {
         // Convert generic errors to UNAVAILABLE ApiError
         error.value = ApiErrors.unavailable(`Service error: ${err.message}`);

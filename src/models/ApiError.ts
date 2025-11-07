@@ -5,8 +5,8 @@ export interface ApiError {
 }
 
 export class ApiErrorException extends Error {
-  public readonly code?: string;
-  public readonly details?: unknown;
+  public readonly code: string | undefined;
+  public readonly details: unknown;
 
   constructor(apiError: ApiError) {
     super(apiError.message);
@@ -20,11 +20,19 @@ export class ApiErrorException extends Error {
   }
 
   toApiError(): ApiError {
-    return {
-      code: this.code,
+    const payload: ApiError = {
       message: this.message,
-      details: this.details,
     };
+
+    if (this.code !== undefined) {
+      payload.code = this.code;
+    }
+
+    if (this.details !== undefined) {
+      payload.details = this.details;
+    }
+
+    return payload;
   }
 }
 

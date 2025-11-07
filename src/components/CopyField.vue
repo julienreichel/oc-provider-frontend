@@ -34,7 +34,7 @@
 
 <script setup lang="ts">
 import { onBeforeUnmount, ref, toRefs } from 'vue';
-import { useQuasar } from 'quasar';
+import { copyToClipboard } from 'quasar';
 
 interface Props {
   label: string;
@@ -51,13 +51,11 @@ const { label, value, helperText } = toRefs(props);
 const emit = defineEmits<{
   (event: 'copied'): void;
 }>();
-
-const $q = useQuasar();
 const copied = ref(false);
 let timeout: ReturnType<typeof setTimeout> | undefined;
 
 const copyValue = async (): Promise<void> => {
-  await $q.copyToClipboard(value.value);
+  await copyToClipboard(value.value);
   copied.value = true;
   emit('copied');
 
