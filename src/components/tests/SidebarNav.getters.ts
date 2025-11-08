@@ -11,8 +11,6 @@ const getByAriaLabel = (label: string): Cypress.Chainable<JQuery<HTMLElement>> =
 export const SidebarNavGetters = {
   // Navigation links - q-items are now focusable with tabindex="0"
   getDashboardLink: () => getByAriaLabel('Go to dashboard'),
-  getDocumentEditLink: () => getByAriaLabel('Go to document editor'),
-  getDocumentSendLink: () => getByAriaLabel('Go to document send'),
   getSettingsLink: () => getByAriaLabel('Go to settings'),
 
   // Helper to get any nav link by visible text (fallback)

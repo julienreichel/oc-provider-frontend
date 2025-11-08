@@ -2,7 +2,7 @@ import { createMemoryHistory, createRouter } from 'vue-router';
 import type { Router } from 'vue-router';
 import App from '../../App.vue';
 import routes from '../../router/routes';
-import { SidebarNavGetters } from '../../components/SidebarNav.getters';
+import { SidebarNavGetters } from '../../components/tests/SidebarNav.getters';
 
 const mountApp = (initialPath = '/'): Cypress.Chainable<Router> => {
   const router = createRouter({
@@ -31,14 +31,6 @@ describe('App navigation (workspace)', () => {
       SidebarNavGetters.getDashboardLink().should('have.attr', 'aria-current', 'page');
 
       // Test that navigation elements are accessible and clickable
-      SidebarNavGetters.getDocumentEditLink()
-        .should('be.visible')
-        .and('have.attr', 'aria-label', 'Go to document editor');
-
-      SidebarNavGetters.getDocumentSendLink()
-        .should('be.visible')
-        .and('have.attr', 'aria-label', 'Go to document send');
-
       SidebarNavGetters.getSettingsLink()
         .should('be.visible')
         .and('have.attr', 'aria-label', 'Go to settings');

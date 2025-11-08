@@ -41,6 +41,7 @@ export default {
       save: 'Save document',
       create: 'Create document',
       send: 'Send document',
+      duplicate: 'Duplicate to draft',
       close: 'Close',
     },
     metadata: {
@@ -51,7 +52,10 @@ export default {
     toast: {
       saved: 'Document saved successfully',
       created: 'Document created successfully',
+      duplicated: 'Draft copy created',
     },
+    lockedMessage: 'This document has already been sent. Create a draft copy to make further edits.',
+    duplicateSuffix: '(copy)',
   },
   documentSend: {
     title: 'Send document',

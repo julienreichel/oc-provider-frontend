@@ -34,9 +34,13 @@
           :show-send="showSendButton"
           :can-send="canSendDocument"
           :sending="sendBusy"
+          :show-duplicate="showDuplicateButton"
+          :duplicate-loading="duplicateBusy"
+          :duplicate-disabled="duplicateBusy"
           @save="handleSave"
           @close="handleClose"
           @send="openSendDialog"
+          @duplicate="handleDuplicate"
         />
       </q-card-section>
 
@@ -47,7 +51,7 @@
           :title="form.title"
           :content="form.content"
           :status="form.status"
-          :disabled="busy"
+          :disabled="disableEditor"
           :errors="{ title: titleError, content: contentError }"
           @update:title="(value) => (form.title = value)"
           @update:content="(value) => (form.content = value)"
@@ -58,6 +62,13 @@
       <q-separator v-if="!isNewDocument && documentDoc" />
 
       <q-card-section v-if="!isNewDocument && documentDoc">
+        <q-banner
+          v-if="showDuplicateButton"
+          class="bg-blue-1 text-blue-10 q-mb-md"
+          data-cy="document-locked-banner"
+        >
+          {{ $t('documentEdit.lockedMessage') }}
+        </q-banner>
         <DocumentMetadataPanel :doc="documentDoc" />
       </q-card-section>
     </q-card>
@@ -148,6 +159,7 @@ watch(
 
 const isNewDocument = computed(() => String(route.params.id ?? 'new') === 'new');
 const documentDoc = computed<Document | null>(() => documentComposable.value?.doc.value ?? null);
+const hasAccessCode = computed(() => Boolean(documentDoc.value?.accessCode));
 const documentLoading = computed(() => documentComposable.value?.loading.value ?? false);
 const documentError = computed<ApiError | null>(
   () => documentComposable.value?.error.value ?? null,
@@ -189,12 +201,25 @@ const isDirty = computed(() => {
   return form.title !== doc.title || form.content !== doc.content || form.status !== doc.status;
 });
 
-const canSave = computed(() => formValid.value && isDirty.value && !busy.value);
+const canSave = computed(
+  () => formValid.value && isDirty.value && !busy.value && !hasAccessCode.value,
+);
 
-const showSendButton = computed(() => !isNewDocument.value);
+const showSendButton = computed(() => !isNewDocument.value && !hasAccessCode.value);
 
 const canSendDocument = computed(() =>
-  Boolean(!isNewDocument.value && documentDoc.value?.status === 'final' && !sendBusy.value),
+  Boolean(
+    !isNewDocument.value &&
+      !hasAccessCode.value &&
+      documentDoc.value?.status === 'final' &&
+      !sendBusy.value,
+  ),
+);
+
+const showDuplicateButton = computed(() => !isNewDocument.value && hasAccessCode.value);
+const duplicateBusy = computed(() => createComposable.creating.value);
+const disableEditor = computed(
+  () => busy.value || (hasAccessCode.value && !isNewDocument.value),
 );
 
 const resetForm = (doc?: Document): void => {
@@ -291,6 +316,28 @@ const handleSendConfirm = async (): Promise<void> => {
       params: { id: doc.id },
       query: { code: result.accessCode },
     });
+  }
+};
+
+const handleDuplicate = async (): Promise<void> => {
+  const doc = documentDoc.value;
+  if (!doc) {
+    return;
+  }
+
+  const payload = {
+    title: `${doc.title} ${t('documentEdit.duplicateSuffix')}`,
+    content: doc.content,
+    status: 'draft' as DocumentStatus,
+  };
+
+  const newId = await createComposable.create(payload);
+  if (newId) {
+    $q.notify({
+      type: 'positive',
+      message: t('documentEdit.toast.duplicated'),
+    });
+    await router.replace({ name: 'document-edit', params: { id: newId } });
   }
 };
 </script>

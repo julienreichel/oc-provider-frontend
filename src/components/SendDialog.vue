@@ -1,5 +1,8 @@
 <template>
-  <q-dialog :model-value="modelValue" @update:model-value="(value) => $emit('update:modelValue', value)">
+  <q-dialog
+    :model-value="modelValue"
+    @update:model-value="(value) => $emit('update:modelValue', value)"
+  >
     <q-card class="send-dialog" :aria-label="$t('a11y.sendConfirmDialog')" role="dialog">
       <q-card-section>
         <div class="text-h6 q-mb-sm">
@@ -8,7 +11,12 @@
         <p class="text-body2">
           {{ warnText }}
         </p>
-        <q-banner v-if="error" class="bg-red-1 text-negative q-mt-sm" :aria-label="$t('a11y.sendErrorState')" role="alert">
+        <q-banner
+          v-if="error"
+          class="bg-red-1 text-negative q-mt-sm"
+          :aria-label="$t('a11y.sendErrorState')"
+          role="alert"
+        >
           {{ error.message }}
         </q-banner>
       </q-card-section>

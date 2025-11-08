@@ -1,5 +1,5 @@
 import { createMemoryHistory, createRouter } from 'vue-router';
-import SidebarNav from './SidebarNav.vue';
+import SidebarNav from '../SidebarNav.vue';
 import { SidebarNavGetters } from './SidebarNav.getters';
 
 const mountSidebarNavForA11y = (initialRoute = '/'): Cypress.Chainable => {
@@ -42,8 +42,8 @@ describe('SidebarNav accessibility', () => {
     cy.focused().should('have.attr', 'aria-label', 'Go to dashboard');
 
     // Test that all navigation links are keyboard accessible
-    SidebarNavGetters.getDocumentEditLink().focus();
-    cy.focused().should('have.attr', 'aria-label', 'Go to document editor');
+    SidebarNavGetters.getSettingsLink().focus();
+    cy.focused().should('have.attr', 'aria-label', 'Go to settings');
   });
 
   it('sets aria-current correctly for screen readers', () => {
@@ -54,8 +54,6 @@ describe('SidebarNav accessibility', () => {
 
     // Inactive routes should not have aria-current
     SidebarNavGetters.getDashboardLink().should('not.have.attr', 'aria-current');
-    SidebarNavGetters.getDocumentEditLink().should('not.have.attr', 'aria-current');
-    SidebarNavGetters.getDocumentSendLink().should('not.have.attr', 'aria-current');
   });
 
   it('supports keyboard and mouse activation', () => {
@@ -88,12 +86,7 @@ describe('SidebarNav accessibility', () => {
     mountSidebarNavForA11y();
 
     // All navigation links should have descriptive aria-labels
-    const expectedLabels = [
-      'Go to dashboard',
-      'Go to document editor',
-      'Go to document send',
-      'Go to settings',
-    ];
+    const expectedLabels = ['Go to dashboard', 'Go to settings'];
 
     cy.get('[aria-label]').each(($el, index) => {
       if (index < expectedLabels.length) {

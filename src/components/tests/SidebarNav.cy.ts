@@ -1,6 +1,6 @@
 import { createMemoryHistory, createRouter } from 'vue-router';
 import SidebarNav from '../SidebarNav.vue';
-import { SidebarNavGetters } from '../SidebarNav.getters';
+import { SidebarNavGetters } from './SidebarNav.getters';
 
 const createTestRouter = (): ReturnType<typeof createRouter> =>
   createRouter({
@@ -52,14 +52,6 @@ describe('SidebarNav', () => {
       .should('exist')
       .and('have.attr', 'aria-label', 'Go to dashboard');
 
-    SidebarNavGetters.getDocumentEditLink()
-      .should('exist')
-      .and('have.attr', 'aria-label', 'Go to document editor');
-
-    SidebarNavGetters.getDocumentSendLink()
-      .should('exist')
-      .and('have.attr', 'aria-label', 'Go to document send');
-
     SidebarNavGetters.getSettingsLink()
       .should('exist')
       .and('have.attr', 'aria-label', 'Go to settings');
@@ -69,7 +61,7 @@ describe('SidebarNav', () => {
     mountSidebarNav();
 
     // Test that navigation links are keyboard accessible
-    SidebarNavGetters.getDocumentEditLink()
+    SidebarNavGetters.getSettingsLink()
       .should('be.visible')
       .and('have.attr', 'tabindex', '0')
       .focus()

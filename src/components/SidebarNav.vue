@@ -49,20 +49,6 @@ const navItems: NavItem[] = [
     matches: ['dashboard'],
   },
   {
-    labelKey: 'navigation.documentEdit',
-    ariaLabelKey: 'a11y.documentEditLink',
-    icon: 'edit_note',
-    to: { name: 'document-edit', params: { id: 'demo-document' } },
-    matches: ['document-edit'],
-  },
-  {
-    labelKey: 'navigation.documentSend',
-    ariaLabelKey: 'a11y.documentSendLink',
-    icon: 'outgoing_mail',
-    to: { name: 'document-send', params: { id: 'demo-document' } },
-    matches: ['document-send'],
-  },
-  {
     labelKey: 'navigation.settings',
     ariaLabelKey: 'a11y.settingsLink',
     icon: 'settings',
