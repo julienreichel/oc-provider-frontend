@@ -13,7 +13,7 @@ const sampleDocument: Document = {
   createdAt: '2024-01-01T00:00:00.000Z',
 };
 
-const mountWithRouter = (): Cypress.Chainable => {
+const mountWithRouter = (doc: Document = sampleDocument): Cypress.Chainable => {
   const router = createRouter({
     history: createMemoryHistory(),
     routes,
@@ -25,7 +25,7 @@ const mountWithRouter = (): Cypress.Chainable => {
     .then(() =>
       cy.mount(DocumentCard, {
         props: {
-          doc: sampleDocument,
+          doc,
         },
         global: {
           plugins: [router],
@@ -85,6 +85,21 @@ describe('DocumentCard accessibility', () => {
 
     // Test Enter key navigation
     documentCardGetters.getDocumentLink().type('{enter}');
+  });
+
+  it('navigates to send result when document has an access code', () => {
+    const sentDocument: Document = {
+      ...sampleDocument,
+      id: 'doc-2',
+      status: 'final',
+      accessCode: 'CODE123',
+    };
+
+    mountWithRouter(sentDocument);
+
+    documentCardGetters
+      .getDocumentLink()
+      .should('have.attr', 'href', '/documents/doc-2/send?code=CODE123');
   });
 
   it('displays document metadata accessibly', () => {

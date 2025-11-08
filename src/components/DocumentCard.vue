@@ -1,9 +1,5 @@
 <template>
-  <router-link
-    class="document-card__link"
-    :to="{ name: 'document-edit', params: { id: doc.id } }"
-    data-cy="document-card"
-  >
+  <router-link class="document-card__link" :to="targetRoute" data-cy="document-card">
     <q-card class="document-card q-pa-md q-mb-md" :aria-label="doc.title" role="article" clickable>
       <div class="row items-center justify-between q-mb-sm">
         <div class="text-subtitle1">{{ doc.title }}</div>
@@ -22,11 +18,25 @@
 </template>
 
 <script setup lang="ts">
+import { computed } from 'vue';
+import type { RouteLocationRaw } from 'vue-router';
 import type { Document } from '../models/Document';
 
-defineProps<{
+const props = defineProps<{
   doc: Document;
 }>();
+
+const targetRoute = computed<RouteLocationRaw>(() => {
+  if (props.doc.accessCode) {
+    return {
+      name: 'document-send',
+      params: { id: props.doc.id },
+      query: { code: props.doc.accessCode },
+    };
+  }
+
+  return { name: 'document-edit', params: { id: props.doc.id } };
+});
 </script>
 
 <style scoped>
