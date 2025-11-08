@@ -1,6 +1,6 @@
 import { createMemoryHistory, createRouter } from 'vue-router';
-import MainLayout from '../../layouts/MainLayout.vue';
-import { MainLayoutGetters } from '../../layouts/MainLayout.getters';
+import MainLayout from '../MainLayout.vue';
+import { MainLayoutGetters } from './MainLayout.getters';
 
 const mountLayout = (initialPath = '/'): Cypress.Chainable => {
   const router = createRouter({

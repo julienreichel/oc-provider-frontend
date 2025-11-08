@@ -1,5 +1,5 @@
 import { createMemoryHistory, createRouter } from 'vue-router';
-import MainLayout from './MainLayout.vue';
+import MainLayout from '../MainLayout.vue';
 import { MainLayoutGetters } from './MainLayout.getters';
 
 const mountLayoutForA11y = (initialRoute = '/'): Cypress.Chainable => {
