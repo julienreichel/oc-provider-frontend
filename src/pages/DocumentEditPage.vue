@@ -30,9 +30,13 @@
         <DocumentToolbar
           :is-new="isNewDocument"
           :can-save="canSave"
-          :loading="busy"
+          :saving="busy"
+          :show-send="showSendButton"
+          :can-send="canSendDocument"
+          :sending="sendBusy"
           @save="handleSave"
           @close="handleClose"
+          @send="openSendDialog"
         />
       </q-card-section>
 
@@ -57,11 +61,22 @@
         <DocumentMetadataPanel :doc="documentDoc" />
       </q-card-section>
     </q-card>
+
+    <SendDialog
+      v-if="showSendButton"
+      :model-value="sendDialogOpen"
+      :status="documentDoc?.status ?? null"
+      :loading="sendBusy"
+      :error="sendError"
+      @update:model-value="(value) => (sendDialogOpen = value)"
+      @confirm="handleSendConfirm"
+      @cancel="closeSendDialog"
+    />
   </section>
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, shallowRef, watch } from 'vue';
+import { computed, reactive, ref, shallowRef, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
 import { useQuasar } from 'quasar';
@@ -70,10 +85,12 @@ import ErrorState from 'components/ErrorState.vue';
 import DocumentEditor from 'components/DocumentEditor.vue';
 import DocumentToolbar from 'components/DocumentToolbar.vue';
 import DocumentMetadataPanel from 'components/DocumentMetadataPanel.vue';
+import SendDialog from 'components/SendDialog.vue';
 import type { Document, DocumentStatus, DocumentUpdate } from 'src/models/Document';
 import type { ApiError } from 'src/models/ApiError';
 import { useDocument } from 'src/composables/useDocument';
 import { useCreateDocument } from 'src/composables/useCreateDocument';
+import { useSendDocument } from 'src/composables/useSendDocument';
 
 interface FormState {
   title: string;
@@ -94,6 +111,8 @@ const form = reactive<FormState>({
 
 const createComposable = useCreateDocument();
 const documentComposable = shallowRef<ReturnType<typeof useDocument> | null>(null);
+const sendComposable = useSendDocument();
+const sendDialogOpen = ref(false);
 
 const setupDocumentComposable = (id: string | null): void => {
   documentComposable.value = id ? useDocument(id) : null;
@@ -138,9 +157,13 @@ const currentError = computed<ApiError | null>(() =>
   isNewDocument.value ? createComposable.error.value : documentError.value,
 );
 
+const sendError = computed<ApiError | null>(() => sendComposable.error.value);
+
 const busy = computed(() =>
   isNewDocument.value ? createComposable.creating.value : documentLoading.value,
 );
+
+const sendBusy = computed(() => sendComposable.sending.value);
 
 const showInitialLoading = computed(
   () => !isNewDocument.value && !documentDoc.value && documentLoading.value,
@@ -167,6 +190,12 @@ const isDirty = computed(() => {
 });
 
 const canSave = computed(() => formValid.value && isDirty.value && !busy.value);
+
+const showSendButton = computed(() => !isNewDocument.value);
+
+const canSendDocument = computed(() =>
+  Boolean(!isNewDocument.value && documentDoc.value?.status === 'final' && !sendBusy.value),
+);
 
 const resetForm = (doc?: Document): void => {
   form.title = doc?.title ?? '';
@@ -230,6 +259,38 @@ const handleClose = (): void => {
 const handleRetry = (): void => {
   if (documentComposable.value) {
     void documentComposable.value.load();
+  }
+};
+
+const openSendDialog = (): void => {
+  if (!showSendButton.value) {
+    return;
+  }
+  sendDialogOpen.value = true;
+};
+
+const closeSendDialog = (): void => {
+  sendDialogOpen.value = false;
+};
+
+const handleSendConfirm = async (): Promise<void> => {
+  const doc = documentDoc.value;
+  if (!doc) {
+    return;
+  }
+
+  const result = await sendComposable.send(doc.id);
+  if (result) {
+    sendDialogOpen.value = false;
+    $q.notify({
+      type: 'positive',
+      message: t('documentSend.toast.sent'),
+    });
+    await router.push({
+      name: 'document-send',
+      params: { id: doc.id },
+      query: { code: result.accessCode },
+    });
   }
 };
 </script>

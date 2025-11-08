@@ -4,7 +4,7 @@ describe('DocumentEditPage Accessibility Patterns', () => {
   it('validates accessibility-first test approach is implemented', () => {
     // This test confirms that we have moved from data-cy to aria-label approach
     // The getters file implements the accessibility-first pattern
-    
+
     // Confirm the getters object exists and has the expected functions
     expect(documentEditPageGetters).to.have.property('getDocumentEditPage');
     expect(documentEditPageGetters).to.have.property('getDocumentEditHeading');
@@ -14,7 +14,7 @@ describe('DocumentEditPage Accessibility Patterns', () => {
     expect(documentEditPageGetters).to.have.property('getDocumentSaveButton');
     expect(documentEditPageGetters).to.have.property('getDocumentCloseButton');
     expect(documentEditPageGetters).to.have.property('getDocumentErrorState');
-    
+
     // Verify functions are callable (they return Cypress commands)
     expect(typeof documentEditPageGetters.getDocumentEditPage).to.equal('function');
     expect(typeof documentEditPageGetters.getDocumentTitleInput).to.equal('function');
@@ -36,12 +36,18 @@ describe('DocumentEditPage Accessibility Patterns', () => {
         </section>
       `;
     });
-    
+
     // Test that all our accessibility-first getters work
     documentEditPageGetters.getDocumentEditPage().should('exist');
-    documentEditPageGetters.getDocumentEditHeading().should('be.visible').and('contain.text', 'Edit document');
+    documentEditPageGetters
+      .getDocumentEditHeading()
+      .should('be.visible')
+      .and('contain.text', 'Edit document');
     documentEditPageGetters.getDocumentTitleInput().should('exist').and('have.value', 'Test Title');
-    documentEditPageGetters.getDocumentContentInput().should('exist').and('contain.text', 'Test content');
+    documentEditPageGetters
+      .getDocumentContentInput()
+      .should('exist')
+      .and('contain.text', 'Test content');
     documentEditPageGetters.getDocumentStatusSelect().should('exist').and('contain.text', 'Draft');
     documentEditPageGetters.getDocumentSaveButton().should('exist').and('contain.text', 'Save');
     documentEditPageGetters.getDocumentCloseButton().should('exist').and('contain.text', 'Close');
@@ -63,22 +69,33 @@ describe('DocumentEditPage Accessibility Patterns', () => {
         </div>
       `;
     });
-    
+
     // Test that aria-label attributes are properly set
-    cy.get('[aria-label="Document title input"]')
-      .should('have.attr', 'aria-label', 'Document title input');
-      
-    cy.get('[aria-label="Document content input"]')
-      .should('have.attr', 'aria-label', 'Document content input');
-      
-    cy.get('[aria-label="Document status select"]')
-      .should('have.attr', 'aria-label', 'Document status select');
-      
-    cy.get('[aria-label="Save document"]')
-      .should('have.attr', 'aria-label', 'Save document');
-      
-    cy.get('[aria-label="Close document editor"]')
-      .should('have.attr', 'aria-label', 'Close document editor');
+    cy.get('[aria-label="Document title input"]').should(
+      'have.attr',
+      'aria-label',
+      'Document title input',
+    );
+
+    cy.get('[aria-label="Document content input"]').should(
+      'have.attr',
+      'aria-label',
+      'Document content input',
+    );
+
+    cy.get('[aria-label="Document status select"]').should(
+      'have.attr',
+      'aria-label',
+      'Document status select',
+    );
+
+    cy.get('[aria-label="Save document"]').should('have.attr', 'aria-label', 'Save document');
+
+    cy.get('[aria-label="Close document editor"]').should(
+      'have.attr',
+      'aria-label',
+      'Close document editor',
+    );
   });
 
   it('validates keyboard accessibility patterns', () => {
@@ -92,22 +109,20 @@ describe('DocumentEditPage Accessibility Patterns', () => {
         </form>
       `;
     });
-    
+
     // Test keyboard navigation
     cy.get('[aria-label="Document title input"]')
       .focus()
       .should('be.focused')
       .type('Test Document Title')
       .should('have.value', 'Test Document Title');
-    
+
     cy.get('[aria-label="Document content input"]')
       .focus()
       .should('be.focused')
       .type('Test document content')
       .should('have.value', 'Test document content');
-    
-    cy.get('[aria-label="Save document"]')
-      .focus()
-      .should('be.focused');
+
+    cy.get('[aria-label="Save document"]').focus().should('be.focused');
   });
 });

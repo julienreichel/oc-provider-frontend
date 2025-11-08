@@ -40,6 +40,7 @@ export default {
     actions: {
       save: 'Save document',
       create: 'Create document',
+      send: 'Send document',
       close: 'Close',
     },
     metadata: {
@@ -58,6 +59,21 @@ export default {
     accessLabel: 'Access code',
     accessHelper: 'Share this code with the recipient to preview the document.',
     placeholder: 'Delivery and confirmation details will surface in this area.',
+    missingCode: 'This page requires a valid access code. Please send the document again.',
+    dialog: {
+      title: 'Send document to client',
+      confirmQuestion: 'Are you sure you want to send this document?',
+      requiresFinal: 'Document must be marked as final before sending.',
+      confirm: 'Send',
+      cancel: 'Cancel',
+    },
+    result: {
+      title: 'Document sent',
+      instructions: 'Share this access code with the client so they can view the document.',
+    },
+    toast: {
+      sent: 'Document sent successfully',
+    },
   },
   documents: {
     status: {
@@ -144,7 +160,19 @@ export default {
     documentContentInput: 'Document content input',
     documentStatusSelect: 'Document status select',
     saveDocument: 'Save document',
+    sendDocument: 'Send document',
     closeDocumentEditor: 'Close document editor',
     documentErrorState: 'Document error state',
+
+    // Document send specific
+    sendResultPanel: 'Send result panel',
+    documentAccessCode: 'Document access code input',
+    copyAccessCode: 'Copy access code',
+    sendErrorState: 'Send error state',
+    retryAction: 'Retry action',
+    backToDashboard: 'Back to dashboard',
+    sendConfirmButton: 'Confirm send document',
+    sendCancelButton: 'Cancel send document',
+    sendConfirmDialog: 'Send document confirmation dialog',
   },
 };

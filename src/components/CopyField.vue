@@ -6,7 +6,7 @@
       readonly
       outlined
       class="q-mb-sm"
-      data-cy="copy-field-input"
+      :aria-label="$attrs['aria-label'] || label"
     >
       <template #append>
         <q-btn
@@ -14,7 +14,7 @@
           dense
           flat
           icon="content_copy"
-          :aria-label="copied ? $t('components.copyField.copied') : $t('components.copyField.copy')"
+          :aria-label="copied ? $t('components.copyField.copied') : $t('a11y.copyAccessCode')"
           @click="copyValue"
         />
       </template>
