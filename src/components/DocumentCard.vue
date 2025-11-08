@@ -4,9 +4,9 @@
       <div class="row items-center justify-between q-mb-sm">
         <div class="text-subtitle1">{{ doc.title }}</div>
         <q-badge
-          :label="$t(`documents.status.${doc.status}`)"
-          :color="doc.status === 'final' ? 'positive' : 'primary'"
-          :aria-label="`Document status: ${$t(`documents.status.${doc.status}`)}`"
+          :label="$t(`documents.status.${displayStatus}`)"
+          :color="statusBadgeColor"
+          :aria-label="`Document status: ${$t(`documents.status.${displayStatus}`)}`"
         />
       </div>
 
@@ -36,6 +36,28 @@ const targetRoute = computed<RouteLocationRaw>(() => {
   }
 
   return { name: 'document-edit', params: { id: props.doc.id } };
+});
+
+const displayStatus = computed(() => {
+  // If document has been sent (has accessCode), show "sent" status
+  if (props.doc.accessCode) {
+    return 'sent';
+  }
+  
+  // Otherwise show the original status
+  return props.doc.status;
+});
+
+const statusBadgeColor = computed(() => {
+  if (displayStatus.value === 'sent') {
+    return 'positive';
+  }
+  
+  if (displayStatus.value === 'final') {
+    return 'positive';
+  }
+  
+  return 'primary';
 });
 </script>
 

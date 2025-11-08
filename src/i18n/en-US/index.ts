@@ -84,6 +84,7 @@ export default {
     status: {
       draft: 'Draft',
       final: 'Final',
+      sent: 'Sent',
     },
     createdAt: 'Created on {date}',
     filterLabel: 'Filter documents',

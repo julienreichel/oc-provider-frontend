@@ -102,6 +102,37 @@ describe('DocumentCard accessibility', () => {
       .should('have.attr', 'href', '/documents/doc-2/send?code=CODE123');
   });
 
+  it('displays "Sent" status for documents with access codes', () => {
+    const sentDocument: Document = {
+      ...sampleDocument,
+      id: 'doc-3',
+      title: 'Sent Document',
+      status: 'final',
+      accessCode: 'SENT123',
+    };
+
+    mountWithRouter(sentDocument);
+
+    // Should show "Sent" instead of "Final" when document has access code
+    documentCardGetters.getDocumentStatus().should('contain.text', 'Sent');
+    documentCardGetters.getDocumentStatus().should('not.contain.text', 'Final');
+  });
+
+  it('displays original status for documents without access codes', () => {
+    const draftDocument: Document = {
+      ...sampleDocument,
+      id: 'doc-4',
+      title: 'Draft Document', 
+      status: 'draft',
+      accessCode: null,
+    };
+
+    mountWithRouter(draftDocument);
+
+    // Should show original status when no access code
+    documentCardGetters.getDocumentStatus().should('contain.text', 'Draft');
+  });
+
   it('displays document metadata accessibly', () => {
     mountWithRouter();
 
