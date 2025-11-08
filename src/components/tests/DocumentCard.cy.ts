@@ -113,9 +113,9 @@ describe('DocumentCard accessibility', () => {
 
     mountWithRouter(sentDocument);
 
-    // Should show "Sent" instead of "Final" when document has access code
-    documentCardGetters.getDocumentStatus().should('contain.text', 'Sent');
-    documentCardGetters.getDocumentStatus().should('not.contain.text', 'Final');
+    // Should show "Sent" status badge when document has access code
+    cy.contains('Sent').should('be.visible');
+    cy.get('[aria-label="Document status: Sent"]').should('exist');
   });
 
   it('displays original status for documents without access codes', () => {
@@ -130,7 +130,8 @@ describe('DocumentCard accessibility', () => {
     mountWithRouter(draftDocument);
 
     // Should show original status when no access code
-    documentCardGetters.getDocumentStatus().should('contain.text', 'Draft');
+    cy.contains('Draft').should('be.visible');
+    cy.get('[aria-label="Document status: Draft"]').should('exist');
   });
 
   it('displays document metadata accessibly', () => {
