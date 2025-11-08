@@ -36,6 +36,16 @@ export default {
     accessHelper: 'Share this code with the recipient to preview the document.',
     placeholder: 'Delivery and confirmation details will surface in this area.',
   },
+  documents: {
+    status: {
+      draft: 'Draft',
+      final: 'Final',
+    },
+    createdAt: 'Created on {date}',
+    filterLabel: 'Filter documents',
+    filterPlaceholder: 'Search by title',
+    loadMore: 'Load more',
+  },
   settings: {
     title: 'Workspace settings',
     description: 'Update organisation details, preferences, and feature flags.',
@@ -98,5 +108,12 @@ export default {
     closeButton: 'Close button',
     submitButton: 'Submit button',
     cancelButton: 'Cancel button',
+
+    // Dashboard specific
+    documentsList: 'Documents list',
+    filterDocuments: 'Filter documents',
+    loadMoreDocuments: 'Load more documents',
+    emptyStateMessage: 'Empty state message',
+    retryLoading: 'Retry loading',
   },
 };

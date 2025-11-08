@@ -9,19 +9,47 @@
       </p>
     </header>
 
-    <EmptyState
-      icon="dashboard_customize"
-      :title="$t('dashboard.empty.title')"
-      :description="$t('dashboard.empty.description')"
-      :action-label="$t('dashboard.empty.action')"
-      :action-to="{ name: 'document-edit', params: { id: 'demo-document' } }"
-      data-cy="dashboard-empty-state"
+    <ListToolbar v-model="search" />
+
+    <div v-if="loading">
+      <LoadingState />
+    </div>
+
+    <div v-else-if="error">
+      <ErrorState :error="error" @retry="refresh" />
+    </div>
+
+    <DocumentList
+      v-else
+      :documents="filteredDocuments"
+      :show-load-more="Boolean(nextCursor)"
+      :loading="loading"
+      @load-more="fetchNext"
     />
   </section>
 </template>
 
 <script setup lang="ts">
-import EmptyState from 'components/EmptyState.vue';
+import { computed, ref } from 'vue';
+import ListToolbar from 'components/ListToolbar.vue';
+import DocumentList from 'components/DocumentList.vue';
+import LoadingState from 'components/LoadingState.vue';
+import ErrorState from 'components/ErrorState.vue';
+import { useDocuments } from 'src/composables/useDocuments';
+
+const search = ref('');
+const { items, nextCursor, loading, error, refresh, fetchNext } = useDocuments();
+
+const filteredDocuments = computed(() => {
+  const term = search.value.trim().toLowerCase();
+  if (!term) {
+    return items.value;
+  }
+
+  return items.value.filter((doc) => doc.title.toLowerCase().includes(term));
+});
+
+void refresh();
 </script>
 
 <style scoped>
