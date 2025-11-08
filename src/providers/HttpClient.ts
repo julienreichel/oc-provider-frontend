@@ -23,7 +23,11 @@ export class HttpClient {
       'Content-Type': JSON_CONTENT_TYPE,
       ...options.headers,
     };
-    this.fetchImpl = options.fetchFn ?? fetch;
+    this.fetchImpl =
+      options.fetchFn ??
+      ((...args: Parameters<typeof fetch>): ReturnType<typeof fetch> => {
+        return globalThis.fetch(...args);
+      });
   }
 
   async get<T>(path: string, init?: RequestInit): Promise<T> {

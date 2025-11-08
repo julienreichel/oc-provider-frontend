@@ -7,7 +7,8 @@ export const getByAriaLabel = (label: string): string => `[aria-label="${label}"
 
 // Helper functions for common Cypress selections
 export const getBody = (): Cypress.Chainable<JQuery<HTMLBodyElement>> => cy.get('body');
-export const getFirstInput = (): Cypress.Chainable<JQuery<HTMLInputElement>> => cy.get('input').first();
+export const getFirstInput = (): Cypress.Chainable<JQuery<HTMLInputElement>> =>
+  cy.get('input').first();
 
 export const dashboardPageGetters = {
   // Main page structure

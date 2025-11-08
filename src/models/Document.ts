@@ -80,8 +80,12 @@ export const isCursorPage = <T>(
   if (!isRecord(value)) {
     return false;
   }
-
-  if (!Array.isArray(value.items) || typeof value.nextCursor !== 'string' && value.nextCursor !== null) {
+  if (
+    !Array.isArray(value.items) ||
+    (typeof value.nextCursor !== 'string' &&
+      value.nextCursor !== null &&
+      value.nextCursor !== undefined)
+  ) {
     return false;
   }
 
