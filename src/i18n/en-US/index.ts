@@ -54,7 +54,8 @@ export default {
       created: 'Document created successfully',
       duplicated: 'Draft copy created',
     },
-    lockedMessage: 'This document has already been sent. Create a draft copy to make further edits.',
+    lockedMessage:
+      'This document has already been sent. Create a draft copy to make further edits.',
     duplicateSuffix: '(copy)',
   },
   documentSend: {
@@ -93,6 +94,39 @@ export default {
     title: 'Workspace settings',
     description: 'Update organisation details, preferences, and feature flags.',
     placeholder: 'Settings forms will be available in a future iteration.',
+    profile: {
+      title: 'Provider profile',
+      description: 'Read-only snapshot of the workspace identity. Editing will be available later.',
+      organizationLabel: 'Organization',
+      organizationValue: 'Octagon Clinics',
+      contactLabel: 'Primary contact',
+      contactValue: 'provider-team@example.com',
+    },
+    health: {
+      title: 'Service health',
+      description: 'Live API status direct from the backend readiness endpoints.',
+      apiHealthLabel: 'API availability',
+      readyLabel: 'Workspace readiness',
+      databaseLabel: 'Database connectivity',
+      refresh: 'Check status',
+      checkedAt: 'Last checked {timestamp}',
+      status: {
+        ok: 'Operational',
+        ready: 'Ready',
+        degraded: 'Degraded',
+        error: 'Unavailable',
+        unknown: 'Unknown',
+      },
+      database: {
+        connected: 'Database connected',
+        disconnected: 'Database disconnected',
+      },
+      ariaLabel: 'Workspace service health panel',
+      readyDescription: {
+        connected: 'All backing services are connected.',
+        disconnected: 'Database connection is unavailable.',
+      },
+    },
   },
   notFound: {
     title: 'Page not found',
