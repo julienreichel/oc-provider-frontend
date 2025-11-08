@@ -11,7 +11,7 @@ describe('i18n configuration', () => {
     expect(i18n.global.t('app.title')).toBe('Provider Workspace');
     expect(i18n.global.t('layout.workspaceTitle')).toBe('Provider Workspace');
     expect(i18n.global.t('dashboard.title')).toBe('Dashboard');
-    expect(i18n.global.t('documentEdit.title')).toBe('Edit document');
+    expect(i18n.global.t('documentEdit.fields.title')).toBe('Title');
     expect(i18n.global.t('documents.filterLabel')).toBe('Filter documents');
     expect(i18n.global.t('settings.title')).toBe('Workspace settings');
   });

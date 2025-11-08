@@ -12,6 +12,7 @@ export interface Document {
 export interface DocumentCreate {
   title: string;
   content: string;
+  status?: DocumentStatus;
 }
 
 export interface DocumentUpdate {

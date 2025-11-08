@@ -27,7 +27,30 @@ export default {
   documentEdit: {
     title: 'Edit document',
     subtitle: 'Document ID: {id}',
-    placeholder: 'The document editor will live here. Use the navigation to explore other routes.',
+    subtitleNew: 'Create a new document',
+    fields: {
+      title: 'Title',
+      content: 'Content',
+      status: 'Status',
+    },
+    validation: {
+      title: 'Title is required',
+      content: 'Content is required',
+    },
+    actions: {
+      save: 'Save document',
+      create: 'Create document',
+      close: 'Close',
+    },
+    metadata: {
+      id: 'Document ID',
+      createdAt: 'Created at',
+      accessCode: 'Access code',
+    },
+    toast: {
+      saved: 'Document saved successfully',
+      created: 'Document created successfully',
+    },
   },
   documentSend: {
     title: 'Send document',
@@ -115,5 +138,13 @@ export default {
     loadMoreDocuments: 'Load more documents',
     emptyStateMessage: 'Empty state message',
     retryLoading: 'Retry loading',
+
+    // Document edit specific
+    documentTitleInput: 'Document title input',
+    documentContentInput: 'Document content input',
+    documentStatusSelect: 'Document status select',
+    saveDocument: 'Save document',
+    closeDocumentEditor: 'Close document editor',
+    documentErrorState: 'Document error state',
   },
 };
