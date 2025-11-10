@@ -1,6 +1,6 @@
 {
   "name": "oc-client-frontend",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A Client",
   "productName": "Client",
   "author": "Julien Reichel <julien.reichel@bluewin.ch>",
