@@ -122,7 +122,7 @@ describe('DocumentCard accessibility', () => {
     const draftDocument: Document = {
       ...sampleDocument,
       id: 'doc-4',
-      title: 'Draft Document', 
+      title: 'Draft Document',
       status: 'draft',
       accessCode: null,
     };

@@ -25,6 +25,9 @@ export const dashboardPageGetters = {
   // Load more functionality
   loadMoreButton: () => getByAriaLabel('Load more documents'),
 
+  // Actions
+  createDocumentButton: () => getByAriaLabel('Create new document'),
+
   // States
   loadingState: () => getByAriaLabel('Loading indicator'),
   emptyState: () => getByAriaLabel('Empty state message'),

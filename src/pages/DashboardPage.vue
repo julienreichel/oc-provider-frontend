@@ -1,12 +1,24 @@
 <template>
   <section class="dashboard-page" aria-labelledby="dashboard-heading">
     <header class="q-mb-lg">
-      <h1 id="dashboard-heading" class="text-h5 q-mb-sm" data-cy="dashboard-title">
-        {{ $t('dashboard.title') }}
-      </h1>
-      <p class="text-body1 text-grey-7">
-        {{ $t('dashboard.description') }}
-      </p>
+      <div class="dashboard-header row items-start justify-between q-mb-sm">
+        <div>
+          <h1 id="dashboard-heading" class="text-h5 q-mb-xs" data-cy="dashboard-title">
+            {{ $t('dashboard.title') }}
+          </h1>
+          <p class="text-body1 text-grey-7">
+            {{ $t('dashboard.description') }}
+          </p>
+        </div>
+        <q-btn
+          color="primary"
+          :label="$t('dashboard.empty.action')"
+          icon="add"
+          :to="{ name: 'document-edit', params: { id: 'new' } }"
+          data-cy="create-document-button"
+          :aria-label="$t('a11y.createDocument')"
+        />
+      </div>
     </header>
 
     <ListToolbar v-model="search" />
@@ -56,5 +68,16 @@ void refresh();
 .dashboard-page {
   max-width: 960px;
   margin: 0 auto;
+}
+
+.dashboard-header {
+  gap: 1rem;
+}
+
+@media (max-width: 600px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: flex-start !important;
+  }
 }
 </style>

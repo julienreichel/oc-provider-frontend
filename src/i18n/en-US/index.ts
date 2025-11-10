@@ -193,6 +193,7 @@ export default {
     loadMoreDocuments: 'Load more documents',
     emptyStateMessage: 'Empty state message',
     retryLoading: 'Retry loading',
+    createDocument: 'Create new document',
 
     // Document edit specific
     documentTitleInput: 'Document title input',

@@ -43,7 +43,7 @@ const displayStatus = computed(() => {
   if (props.doc.accessCode) {
     return 'sent';
   }
-  
+
   // Otherwise show the original status
   return props.doc.status;
 });
@@ -52,11 +52,11 @@ const statusBadgeColor = computed(() => {
   if (displayStatus.value === 'sent') {
     return 'positive';
   }
-  
+
   if (displayStatus.value === 'final') {
     return 'positive';
   }
-  
+
   return 'primary';
 });
 </script>
