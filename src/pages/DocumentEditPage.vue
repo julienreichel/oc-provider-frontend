@@ -125,6 +125,17 @@ const documentComposable = shallowRef<ReturnType<typeof useDocument> | null>(nul
 const sendComposable = useSendDocument();
 const sendDialogOpen = ref(false);
 
+const resetForm = (doc?: Document): void => {
+  form.title = doc?.title ?? '';
+  form.content = doc?.content ?? '';
+  form.status = doc?.status ?? 'draft';
+
+  // Clear any existing errors when resetting form
+  if (!doc && createComposable.error.value) {
+    createComposable.error.value = null;
+  }
+};
+
 const setupDocumentComposable = (id: string | null): void => {
   documentComposable.value = id ? useDocument(id) : null;
   if (id) {
@@ -219,20 +230,7 @@ const canSendDocument = computed(() =>
 
 const showDuplicateButton = computed(() => !isNewDocument.value && hasAccessCode.value);
 const duplicateBusy = computed(() => createComposable.creating.value);
-const disableEditor = computed(
-  () => busy.value || (hasAccessCode.value && !isNewDocument.value),
-);
-
-const resetForm = (doc?: Document): void => {
-  form.title = doc?.title ?? '';
-  form.content = doc?.content ?? '';
-  form.status = doc?.status ?? 'draft';
-  
-  // Clear any existing errors when resetting form
-  if (!doc && createComposable.error.value) {
-    createComposable.error.value = null;
-  }
-};
+const disableEditor = computed(() => busy.value || (hasAccessCode.value && !isNewDocument.value));
 
 const handleSave = async (): Promise<void> => {
   if (!canSave.value) {
