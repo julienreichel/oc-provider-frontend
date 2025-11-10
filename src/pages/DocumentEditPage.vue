@@ -130,6 +130,7 @@ const setupDocumentComposable = (id: string | null): void => {
   if (id) {
     void documentComposable.value?.load();
   } else {
+    // Ensure form is clean for new document
     resetForm();
   }
 };
@@ -226,6 +227,11 @@ const resetForm = (doc?: Document): void => {
   form.title = doc?.title ?? '';
   form.content = doc?.content ?? '';
   form.status = doc?.status ?? 'draft';
+  
+  // Clear any existing errors when resetting form
+  if (!doc && createComposable.error.value) {
+    createComposable.error.value = null;
+  }
 };
 
 const handleSave = async (): Promise<void> => {
